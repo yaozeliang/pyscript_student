@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-	<py-env>
-	- bokeh
-	- numpy
-	- pandas
-	</py-env>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+	<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+<py-env>
+- pandas
+- pyyaml
+- paths:
+  - /student.py
+  - /db.yaml
+</py-env>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Document</title>
 
+<title>Student Management</title>
 </head>
 <body>
     
 	<div class="container">
 
-
 		<div class="row justify-content-md-center">
-			<!-- <div class="col col-lg-2"></div> -->
 			<div class="col-md-10">
-			  <h2>Student Management</h2>
+			  <h2 id="total"></h2>
 			  <br>
 			  <form class="form-inline" onsubmit="return false">
 				<div class="form-group  mb-2">
@@ -38,9 +38,7 @@
 						pys-onClick="createStudent" >Confirm </button>
 			  </form>
 			  <ul class="list-group" id="studentList"></ul>
-
 			</div>
-			<!-- <div class="col col-lg-2"></div> -->
 		</div>
 	</div>
 
