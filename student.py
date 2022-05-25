@@ -17,7 +17,6 @@ def write_yaml_data(data,file=DATA_BASE):
     with open(file,'w') as f:
         yaml.dump(data,f)
 
-
 @dataclass
 class Handler:
     data:Dict = field(default_factory=lambda:dict())
