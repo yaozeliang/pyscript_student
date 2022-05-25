@@ -20,7 +20,6 @@ def write_yaml_data(data,file=DATA_BASE):
 
 @dataclass
 class Handler:
-
     data:Dict = field(default_factory=lambda:dict())
     def __new__(cls):
         if not hasattr(cls, 'instance'):
@@ -39,17 +38,13 @@ class Handler:
             
     def totalNumber(self,showText=None)->Union[None,int]:
         currentNumber = len(self.data['students']['name'])
-        if showText:
-            document.getElementById("total").textContent= f"Total {currentNumber} students"
-        else:
-            return currentNumber
-
+        document.getElementById("total").textContent= f"Total {currentNumber} students" if showText else currentNumber
+       
 
     def showAllStudents(self,*args,**kargs)-> None:
         
         elements = document.getElementById("studentList").getElementsByTagName("li")
         exist = [str(x.textContent) for x in elements]
-        self.data = retrive_yaml_data()
         for e in self.data['students']['name']:
             if e not in exist:
                 node = document.createElement("li")
@@ -66,14 +61,13 @@ class Handler:
 def clearInput(*args,**kargs)->None:
     document.getElementById('inputName').value = ''
 
-
-
 def actionPost(*ags, **kws):
     Handler().addStudent()
     
-
 if __name__=='__main__':
     write_yaml_data({'students':{'name':['Mary','Andy']}})
     h = Handler()
     h.totalNumber(showText=True)
     h.showAllStudents()
+
+
