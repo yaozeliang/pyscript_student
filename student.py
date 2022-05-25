@@ -2,51 +2,55 @@ from dataclasses import dataclass,field
 from importlib import import_module
 from typing import AnyStr,Any,Union,List,Dict
 import yaml
+import pandas as pd
 import json
 
 DATA_BASE = 'db.yaml'
 
+def retrive_yaml_data(file=DATA_BASE):
+    data = {}
+    with open(file) as f:
+        data=yaml.safe_load(f)
+    return data
+
+def write_yaml_data(data,file=DATA_BASE):
+    with open(file,'w') as f:
+        yaml.dump(data,f)
+
+
 @dataclass
 class Handler:
 
-    students: list[str] = field(default_factory=list)
-    tmpData = {"students":{"name":[]}}
+    data:Dict = field(default_factory=lambda:dict())
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Handler, cls).__new__(cls)
         return cls.instance
 
     def __post_init__(self):
-        self.getData()
-
-    def getData(self)-> List[str]:
-        with open(DATA_BASE) as f:
-            self.tmpData["students"]["name"]=yaml.safe_load(f)["students"]["name"]
+        self.data = retrive_yaml_data()
 
     def refreshData(self)->List[str]:
-        print(self.tmpData["students"]["name"])
-        with open(DATA_BASE,'w') as f:
-            yaml.dump(self.tmpData, f,default_flow_style=False)
-            
-        self.getData()
+        write_yaml_data(self.data)
+        self.data = retrive_yaml_data()
         self.totalNumber(showText=True)
         self.showAllStudents()
-        
-    
-        
+
+            
     def totalNumber(self,showText=None)->Union[None,int]:
+        currentNumber = len(self.data['students']['name'])
         if showText:
-            document.getElementById("total").textContent= f'Total {len(self.tmpData["students"]["name"])} students'
+            document.getElementById("total").textContent= f"Total {currentNumber} students"
         else:
-            return len(self.tmpData["students"]["name"])
+            return currentNumber
 
 
     def showAllStudents(self,*args,**kargs)-> None:
-
+        
         elements = document.getElementById("studentList").getElementsByTagName("li")
         exist = [str(x.textContent) for x in elements]
-        print(exist)
-        for e in tuple(self.tmpData['students']['name']):
+        self.data = retrive_yaml_data()
+        for e in self.data['students']['name']:
             if e not in exist:
                 node = document.createElement("li")
                 node.setAttribute("class", "list-group-item")
@@ -55,10 +59,9 @@ class Handler:
     
     def addStudent(self,*args,**kargs)-> None:
         inputName = document.getElementById("inputName").value
-        self.tmpData['students']['name'].append(inputName)
+        self.data['students']['name'].append(str(inputName))
         self.refreshData()
     
-
 
 def clearInput(*args,**kargs)->None:
     document.getElementById('inputName').value = ''
@@ -67,13 +70,10 @@ def clearInput(*args,**kargs)->None:
 
 def actionPost(*ags, **kws):
     Handler().addStudent()
-
-  
+    
 
 if __name__=='__main__':
+    write_yaml_data({'students':{'name':['Mary','Andy']}})
     h = Handler()
     h.totalNumber(showText=True)
     h.showAllStudents()
-
-
-
